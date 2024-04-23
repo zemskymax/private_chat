@@ -3,11 +3,11 @@ Use Ollama and Streamlit Python libraries to create a private (local) GPT like c
 
 # Installation
 pip install ollama
-## Test 
+** Test **
 ollama -v
 
 pip install streamlit
-## Test
+** Test **
 streamlit hello
 
 # Important

@@ -17,9 +17,16 @@ for msg in st.session_state.messages:
     else:
         st.chat_message(msg["role"], avatar="🤖").write(msg["content"])
 
+options = {
+    'num_ctx': 4096, # default is 2048
+    'temperature': 0.2, # default is 0.8
+    'top_k': 15, # default is 40
+    'top_p': 0.5, #default is 0.9
+}
+
 ## Generate a response (async) using an LLM
 def generate_response():
-    response = ollama.chat(model='llama3', stream=True, messages=st.session_state.messages)
+    response = ollama.chat(model='llama3', stream=True, messages=st.session_state.messages, options=options)
     for partial_resp in response:
         try:
             token = partial_resp["message"]["content"]
