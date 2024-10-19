@@ -24,7 +24,7 @@ options = {
     'top_p': 0.5, #default is 0.9
 }
 
-## Generate a response (async) using an LLM
+# Generate a response (async) using an LLM
 def generate_response():
     response = ollama.chat(model='llama3.2', stream=True, messages=st.session_state.messages, options=options)
     for partial_resp in response:
