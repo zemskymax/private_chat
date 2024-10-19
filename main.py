@@ -13,9 +13,9 @@ if "messages" not in st.session_state:
 # Write message history
 for msg in st.session_state.messages:
     if msg["role"] == "user":
-        st.chat_message(msg["role"], avatar="🧑‍💻").write(msg["content"])
+        st.chat_message(msg["role"]).write(msg["content"])
     else:
-        st.chat_message(msg["role"], avatar="🤖").write(msg["content"])
+        st.chat_message(msg["role"]).write(msg["content"])
 
 options = {
     'num_ctx': 4096, # default is 2048
@@ -26,7 +26,7 @@ options = {
 
 ## Generate a response (async) using an LLM
 def generate_response():
-    response = ollama.chat(model='llama3', stream=True, messages=st.session_state.messages, options=options)
+    response = ollama.chat(model='llama3.2', stream=True, messages=st.session_state.messages, options=options)
     for partial_resp in response:
         try:
             token = partial_resp["message"]["content"]
@@ -35,17 +35,21 @@ def generate_response():
         except Exception as inst:
             print("---> " + inst)
 
+def main():
+    # Handle user input
+    if prompt := st.chat_input("Enter your message here..."):
+        st.session_state.messages.append({"role": "user", "content": prompt})
+        st.chat_message("user").write(prompt)
 
-# Handle user input
-if prompt := st.chat_input("Enter your message here..."):
-    st.session_state.messages.append({"role": "user", "content": prompt})
-    st.chat_message("user", avatar="🧑‍💻").write(prompt)
-    
-    # Clear the previous message
-    st.session_state["full_message"] = ""
-    
-    # Write the generated response
-    st.chat_message("assistant", avatar="🤖").write_stream(generate_response)
+        # Clear the previous message
+        st.session_state["full_message"] = ""
 
-    # Update message history
-    st.session_state.messages.append({"role": "assistant", "content": st.session_state["full_message"]})
+        # Write the generated response
+        st.chat_message("assistant").write_stream(generate_response)
+
+        # Update message history
+        st.session_state.messages.append({"role": "assistant", "content": st.session_state["full_message"]})
+
+
+if __name__ == "__main__":
+    main()
