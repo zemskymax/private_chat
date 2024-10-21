@@ -3,7 +3,7 @@ import ollama
 
 
 # Set page title
-st.session_state.app_name = "⚡️ Private Chat"
+st.session_state.app_name = "Private Chat"
 st.title(f"{st.session_state.app_name}")
 
 # Add BOT (LLM) greeting (if needed)
